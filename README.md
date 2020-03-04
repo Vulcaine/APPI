@@ -1,4 +1,6 @@
 # SIMPLE, HANDY, EYE CANDY
+# INSTALL REQUIREMENTS
+`pip install -r requirements.txt`
 # OPTIONS
 
 `appi --version`
