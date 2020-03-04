@@ -1,0 +1,102 @@
+{
+    "version": "1.0.0",
+    "root-file": "appi.json",
+    "app-type": "None",
+    "install-root": "C:/Program Files/APPI/",
+    "temp-download-folder": "temp/",
+
+    "cli-options":
+    {
+        "--version": {
+            "aliases": ["-v"],
+            "function": "lambda args: self.Version(args)"
+        },
+
+        "init": {
+            "aliases": ["-i"],
+            "function": "lambda args: self.Init(args)"
+        },
+
+        "add":  {
+            "aliases": [],
+            "function": "lambda args: self.ValidateRepository(self.Add, args)"
+        },
+
+        "simple-express":
+        {
+            "aliases": ["express", "-se"],
+            "function": "lambda args: self.ValidateRepository(self.InitSimpleExpressApp, args)"
+        },
+
+        "start":
+        {
+            "aliases": [],
+            "function": "lambda args: self.ValidateRepository(self.Start, args)"
+        },
+
+        "github-setup":
+        {
+            "aliases": [],
+            "function": "lambda args: self.ValidateRepository(self.GitHubSetup, args)"
+        },
+
+        "git-checkout-branch":
+        {
+            "aliases": ["checkout", "switch-branch", "-b"],
+            "function": "lambda args: self.GitBranch(args)"
+        }
+    },
+
+    "cli-add-options":
+    {
+        "docker":   {
+            "aliases": [],
+            "function": "lambda args: self.ValidateRepository(self.AddDocker, args)"
+        },
+
+        "nodejs":   {
+            "aliases": ["-n", "node", "npm", "njs"],
+            "function": "lambda args: self.ValidateRepository(self.AddNodeJS, args)"
+        },
+
+        "angular":  {
+            "aliases": ["-a", "ng"],
+            "function": "lambda args: self.ValidateRepository(self.AddAngular, args)"
+        },
+
+        "mongodb": {
+            "aliases": ["-m", "mongo"],
+            "function": "lambda args: self.ValidateRepository(self.AddMongoDB, args)"
+        },
+
+        "mean-stack": {
+            "aliases": ["mean"],
+            "function": "lambda args: self.ValidateRepository(self.AddMeanStack, args)"
+        }
+    },
+    
+    "docker-images":
+    {
+        "angular": [],
+        "nodejs": [],
+        "mongodb": [],
+
+        "mean": []
+    },
+
+    "windows-service":
+    {
+        "nodejs":   {
+            "strategy": "msi",
+            "url": "https://nodejs.org/dist/v8.3.0/node-v8.3.0-x64.msi"
+        },
+        "mongodb":  {
+            "strategy": "msi",
+            "url": "https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2012plus-4.2.3-signed.msi"
+        },
+        "docker": {
+            "strategy": "exe",
+            "url": "https://download.docker.com/win/stable/Docker%20Desktop%20Installer.exe"
+        }
+    }
+}
