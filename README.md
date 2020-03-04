@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # SIMPLE, HANDY, EYE CANDY
 # OPTIONS
 
@@ -13,6 +12,3 @@
 `appi add docker:angular`
 `appi add docker:nodejs`
 `appi add docker:mongodb`
-=======
-# APPI
->>>>>>> 9305e6688fa95d96c876efa1ebc39580923391bf
