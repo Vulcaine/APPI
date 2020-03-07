@@ -1,16 +1,17 @@
-from shell import AssertDockerInstalled
+from shell import assertshell as ash
 from extenders import extenderhelpers as helper
 from configuration import config
+from logger import Logger
 
 conf = config.GetConfig()
 
 IMAGES = conf['docker-images']
 
-def Extend(args, Logger):
+def Extend(args):
     containers = args[0].split(':')[1:]
     switch = helper.GetSwitchFromArgs(args)
 
-    AssertDockerInstalled()
+    ash.AssertDockerInstalled()
 
     if not containers or len(containers) == 0:
         return Logger.Error("Error use of " + args + " please read the manual")

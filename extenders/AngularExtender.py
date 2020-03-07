@@ -1,12 +1,13 @@
-from shell import CreateNgApp
+from shell import creatorshell as csh
 from extenders import extenderhelpers as helper
 from configuration import config
+from logger import Logger
 
 conf = config.GetConfig()
 
-def Extend(args, Logger):
+def Extend(args):
 
-    CreateNgApp(args[1])
+    csh.CreateNgApp(args[1])
 
     conf['app-type'] = 'non-virtualized'
     conf['features']['frontend'] = 'angular'

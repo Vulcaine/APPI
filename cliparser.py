@@ -7,7 +7,7 @@ from configuration import config
 from extenders import ExtenderFactory as EF
 
 from logger    import Logger
-from shell     import CustomPrompt
+from shell     import shellhelper as sh
 
 class CLIParser:
     def __init__(self, cml):
@@ -75,7 +75,7 @@ class CLIParser:
     def ValidateRepository(self, callback, args):
         if not self.IsValidAppiRepository():
             Logger.Error("This is not a valid APPI repository")
-            answer = CustomPrompt(
+            answer = sh.CustomPrompt(
                                     "Would you like to create it? ",
                                     lambda: self.CreateRepository(),
                                     lambda: sys.exit()
@@ -96,19 +96,31 @@ class CLIParser:
         return EF.Handler('git').Status(args)
 
     def GitHubSetup(self, args):
-        return EF.Extend('github', args, Logger)
+        return EF.Extend('github', args)
 
     def Start(self, args):
+        return
+
+    def Download(self, args):
         return
 
     def Version(self, args):
         Logger.Info('Current version: ' + self.version)
 
+    def IsBackendTypeExists(self, backendType):
+        return 'features' in self.conf and 'backend' in self.conf['features'] and 'type' in self.conf['features']['backend'] and self.conf['features']['backend']['type'] == backendType
+
+    def IsFrontendTypeExists(self, frontendType):
+        return 'features' in self.conf and 'frontend' in self.conf['features'] and 'type' in self.conf['features']['frontend'] and self.conf['features']['frontend']['type'] == frontendType
+
+    def IsDatabaseTypeExists(self, dbType):
+        return 'features' in self.conf and 'database' in self.conf['features'] and self.conf['features']['database'] == dbType
+
     def InitSimpleExpressApp(self, args):
         if self.conf['app-type'] == 'virtualized' or self.conf['app-type'] == 'simple-express-app':
             return Logger.Error("This is already an {0} based repo, can't add this feature".format(self.conf['app-type']))
 
-        return EF.Extend('express', args, Logger)
+        return EF.Extend('express', args)
 
     def Init(self, args):
         if self.IsValidAppiRepository():
@@ -132,40 +144,49 @@ class CLIParser:
         self.cmCursor -= 1
         self.Process()
 
+    def AddSpringMaven(self, args):
+        if self.conf['app-type'] == 'virtualized':
+            return Logger.Error("This is already an {0} based repo, can't add this feature".format(self.conf['app-type']))
+
+        if self.IsBackendTypeExists('spring-maven'):
+            return Logger.Error("Feature spring-maven already in this repo, try to add modules with feature add spring-maven-module")
+
+        return EF.Extend('spring-maven', args)
+
     # TODO: Beletenni appi.json fájlba hogy milyen komponenseket adtunk hozzá
     # azzal eldönteni hogy lehet-e hozzáadni, nem az app-type alapján
     def AddNodeJS(self, args):
         if self.conf['app-type'] == 'virtualized':
             return Logger.Error("This is already an {0} based repo, can't add this feature".format(self.conf['app-type']))
 
-        if 'backend' in self.conf['features'] and self.conf['features']['backend'] == 'nodejs':
-            return Logger.Error("Feature nodejs already in this repo")
+        if self.IsBackendTypeExists('nodejs'):
+            return Logger.Error("Feature nodejs already in this repo, try add modules with feature node-module")
 
-        return EF.Extend('nodejs', args, Logger)
+        return EF.Extend('nodejs', args)
 
     def AddAngular(self, args):
         if self.conf['app-type'] == 'virtualized':
             return Logger.Error("This is already an {0} based repo, can't add this feature".format(self.conf['app-type']))
 
-        if 'frontend' in self.conf['features'] and self.conf['features']['frontend'] == 'angular':
+        if self.IsFrontendTypeExists('angular'):
             return Logger.Error("Feature angular already in this repo")
 
-        return EF.Extend('angular', args, Logger)
+        return EF.Extend('angular', args)
 
     def AddMongoDB(self, args):
         if self.conf['app-type'] == 'virtualized':
             return Logger.Error("This is already an {0} based repo, can't add this feature".format(self.conf['app-type']))
 
-        if 'database' in self.conf['features'] and self.conf['features']['database'] == 'mongodb':
+        if self.IsDatabaseTypeExists('mongodb'):
             return Logger.Error("Feature mongodb already in this repo")
 
-        return EF.Extend('mongodb', args, Logger)
+        return EF.Extend('mongodb', args)
 
     def AddDocker(self, args):
         if self.conf['app-type'] == 'non-virtualized':
             return Logger.Error("This is already an {0} based repo, can't add this feature".format(self.conf['app-type']))
 
-        return EF.Extend('docker', args, Logger)
+        return EF.Extend('docker', args)
 
     def Process(self):
         self.cmCursor += 1

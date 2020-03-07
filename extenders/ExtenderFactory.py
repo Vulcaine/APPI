@@ -5,26 +5,30 @@ from . import AngularExtender
 from . import MongoExtender
 from . import ExpressExtender
 from . import DockerExtender
+from . import SpringMavenExtender
 from handlers import HandlerFactory
+from logger import Logger
 
 
-def Extend(which, args, Logger):
+def Extend(which, args):
     if which == 'github':
-        return GitExtenderFactory.Extend('github', args, Logger)
+        return GitExtenderFactory.Extend('github', args)
     if which == 'gitlab':
-        return GitExtenderFactory.Extend('gitlab', args, Logger)
+        return GitExtenderFactory.Extend('gitlab', args)
     if which == 'bitbucket':
-        return GitExtenderFactory.Extend('bitbucket', args, Logger)
+        return GitExtenderFactory.Extend('bitbucket', args)
     if which == 'nodejs':
-        return NodeExtender.Extend(args, Logger)
+        return NodeExtender.Extend(args)
     if which == 'angular':
-        return AngularExtender.Extend(args, Logger)
+        return AngularExtender.Extend(args)
     if which == 'mongodb':
-        return MongoExtender.Extend(args, Logger)
+        return MongoExtender.Extend(args)
     if which == 'express':
-        return ExpressExtender.Extend(args, Logger)
+        return ExpressExtender.Extend(args)
     if which == 'docker':
-        return DockerExtender.Extend(args, Logger)
+        return DockerExtender.Extend(args)
+    if which == 'spring-maven':
+        return SpringMavenExtender.Extend(args)
 
 def Handler(which):
     if which == 'git':

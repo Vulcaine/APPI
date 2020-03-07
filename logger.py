@@ -22,6 +22,13 @@ class Logger:
         return 0
 
     @staticmethod
+    def Required(message, c = 'red', end = '\n', attrs = []):
+        attrs.append('underline')
+
+        cprint('!' + message, c, end = end, attrs = attrs)
+        return 0
+
+    @staticmethod
     def Success(message, c = 'green', end = '\n', attrs = [ 'bold' ]):
         cprint(message, c, end = end, attrs = attrs)
         return 1

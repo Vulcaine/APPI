@@ -22,6 +22,11 @@
             "function": "lambda args: self.ValidateRepository(self.Add, args)"
         },
 
+        "spring-maven": {
+            "aliases": [],
+            "function": "lambda args: self.ValidateRepository(self.AddSpringMaven, args)"
+        },
+
         "simple-express":
         {
             "aliases": ["express", "se"],
@@ -86,6 +91,11 @@
         {
             "aliases": ["commit"],
             "function": "lambda args: self.GitCommit(args)"
+        },
+
+        "download": {
+            "aliases": [],
+            "function": "lambda args: self.Download(args)"
         }
     },
 
@@ -94,10 +104,6 @@
         "docker":   {
             "aliases": [],
             "function": "lambda args: self.ValidateRepository(self.AddDocker, args)"
-        },
-
-        "spring": {
-            
         },
 
         "nodejs":   {
@@ -120,7 +126,7 @@
             "function": "lambda args: self.ValidateRepository(self.AddMeanStack, args)"
         }
     },
-    
+
     "docker-images":
     {
         "angular": [],
@@ -143,6 +149,10 @@
         "docker": {
             "strategy": "exe",
             "url": "https://download.docker.com/win/stable/Docker%20Desktop%20Installer.exe"
+        },
+        "maven": {
+            "strategy": "zip",
+            "url": "http://xenia.sote.hu/ftp/mirrors/www.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.zip"
         }
     }
 }

@@ -1,6 +1,7 @@
-from shell import RegisterGitRemote
+from shell import gitshell as gsh
+from logger import Logger
 
-def Extend(args, Logger):
+def Extend(args):
     if len(args) < 2:
         return Logger.Error("Missing parameters from git initialization")
 
@@ -10,4 +11,4 @@ def Extend(args, Logger):
 
     remote = '{0}/{1}/{2}.git'.format(url, username, repo)
 
-    return RegisterGitRemote(remote)
+    return gsh.RegisterGitRemote(remote)
