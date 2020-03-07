@@ -267,3 +267,8 @@ def RegisterGitRemote(remote):
         return Logger.Failed("Unexpected error during git installation.")
        
 
+def GitListBranch(args):
+    return AssertCall("git branch -r")
+
+def GitStatus(args):
+    return AssertCall("git status")

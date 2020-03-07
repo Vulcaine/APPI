@@ -13,18 +13,18 @@
         },
 
         "init": {
-            "aliases": ["-i"],
+            "aliases": ["i"],
             "function": "lambda args: self.Init(args)"
         },
 
-        "add":  {
+        "feature":  {
             "aliases": [],
             "function": "lambda args: self.ValidateRepository(self.Add, args)"
         },
 
         "simple-express":
         {
-            "aliases": ["express", "-se"],
+            "aliases": ["express", "se"],
             "function": "lambda args: self.ValidateRepository(self.InitSimpleExpressApp, args)"
         },
 
@@ -40,10 +40,52 @@
             "function": "lambda args: self.ValidateRepository(self.GitHubSetup, args)"
         },
 
+        "git-status":
+        {
+            "aliases": ["status"],
+            "function": "lambda args: self.GitStatus(args)"
+        },
+
+        "git-list-branch":
+        {
+            "aliases": ["branch"],
+            "function": "lambda args: self.GitListBranch(args)"
+        },
+
         "git-checkout-branch":
         {
-            "aliases": ["checkout", "switch-branch", "-b"],
-            "function": "lambda args: self.GitBranch(args)"
+            "aliases": ["checkout", "switch-branch"],
+            "function": "lambda args: self.GitCheckoutBranch(args)"
+        },
+
+        "git-create-branch":
+        {
+            "aliases": ["new-branch", "newb"],
+            "function": "lambda args: self.GitCreateBranch(args)"
+        },
+
+        "git-push":
+        {
+            "aliases": ["push"],
+            "function": "lambda args: self.GitPush(args)"
+        },
+
+        "git-pull":
+        {
+            "aliases": ["pull"],
+            "function": "lambda args: self.GitPull(args)"
+        },
+
+        "git-add":
+        {
+            "aliases": ["add"],
+            "function": "lambda args: self.GitAdd(args)"
+        },
+
+        "git-commit":
+        {
+            "aliases": ["commit"],
+            "function": "lambda args: self.GitCommit(args)"
         }
     },
 
@@ -54,18 +96,22 @@
             "function": "lambda args: self.ValidateRepository(self.AddDocker, args)"
         },
 
+        "spring": {
+            
+        },
+
         "nodejs":   {
-            "aliases": ["-n", "node", "npm", "njs"],
+            "aliases": ["n", "node", "npm", "njs"],
             "function": "lambda args: self.ValidateRepository(self.AddNodeJS, args)"
         },
 
         "angular":  {
-            "aliases": ["-a", "ng"],
+            "aliases": ["a", "ng"],
             "function": "lambda args: self.ValidateRepository(self.AddAngular, args)"
         },
 
         "mongodb": {
-            "aliases": ["-m", "mongo"],
+            "aliases": ["m", "mongo"],
             "function": "lambda args: self.ValidateRepository(self.AddMongoDB, args)"
         },
 
