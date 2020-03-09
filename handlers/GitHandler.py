@@ -1,11 +1,14 @@
+from shell.gitshell import GitListBranch
+from shell.gitshell import GitStatus
+
 def ToBranch(args):
     return
 
 def ListBranch(args):
-    return shell.GitListBranch(args)
+    return GitListBranch(args)
 
 def Status(args):
-    return shell.GitStatus(args)
+    return GitStatus(args)
 
 def Commit(args):
     return
