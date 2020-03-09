@@ -3,7 +3,7 @@ import sys
 import ctypes
 import os
 
-from logger import Logger
+from logger         import Logger
 
 def AddToPathPrompt(syspath):
     message = "Would you like to add {} to path?".format(syspath)

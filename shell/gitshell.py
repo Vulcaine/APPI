@@ -1,7 +1,6 @@
-from . import assertshell as assertsh
-from . import shellhelper as sh
-
-from logger import Logger
+from .              import assertshell      as assertsh
+from .              import shellhelper      as sh
+from logger         import Logger
 
 def GitListBranch(args):
     return assertsh.AssertCall("git branch -r")

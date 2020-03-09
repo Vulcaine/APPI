@@ -1,9 +1,9 @@
 import os
 
-from shell import shellhelper as sh
-from shell import creatorshell as csh
+from shell          import shellhelper as sh
+from shell          import creatorshell as csh
 
-from configuration import config
+from configuration  import config
 
 conf = config.GetConfig()
 

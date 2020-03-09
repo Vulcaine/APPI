@@ -1,4 +1,4 @@
-from xmlparser.xmlbuilder import XMLBuilder
+from xmlparser.xmlbuilder       import XMLBuilder
 
 class PomBuilder:
     def __init__(self, modelVersion = '4.0.0'):

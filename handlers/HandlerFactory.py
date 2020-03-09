@@ -1,4 +1,4 @@
-from . import GitHandler
+from .          import GitHandler
 
 def Handler(which):
     if which == 'git':

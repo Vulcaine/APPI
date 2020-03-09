@@ -1,9 +1,9 @@
-from . import shellhelper as sh
-from . import assertshell as assertsh
-from . import installshell as installsh
+from .                  import shellhelper      as sh
+from .                  import assertshell      as assertsh
+from .                  import installshell     as installsh
 
-from configuration import config
-from logger import Logger
+from configuration      import config
+from logger             import Logger
 
 def InstallMultiple(services, via):
     try:

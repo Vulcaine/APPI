@@ -1,7 +1,7 @@
 
 import json
 import os
-from logger import Logger
+from logger             import Logger
 
 config = {}
 

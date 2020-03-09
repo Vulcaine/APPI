@@ -1,6 +1,6 @@
-from shell import installshell as ish
-from configuration import config
-from logger import Logger
+from shell          import installshell as ish
+from configuration  import config
+from logger         import Logger
 
 conf = config.GetConfig()
 

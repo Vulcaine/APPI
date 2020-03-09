@@ -1,5 +1,5 @@
-from xml.etree.ElementTree import Element, SubElement, Comment, tostring, XML
-from xml.dom import minidom
+from xml.etree.ElementTree  import Element, SubElement, Comment, tostring, XML
+from xml.dom                import minidom
 
 def _prettify(elem):
     """Return a pretty-printed XML string for the Element.

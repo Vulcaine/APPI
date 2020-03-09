@@ -1,4 +1,5 @@
 import sys
+
 from cliparser import CLIParser
 
 def __main__():

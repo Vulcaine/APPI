@@ -1,10 +1,10 @@
-from logger import Logger
-from configuration import config
+from logger                 import Logger
+from configuration          import config
 
-from . import installshell as ish
-from . import assertshell as ash
-from . import shellhelper as sh
-from xmlparser.pombuilder import PomBuilder
+from .                      import installshell     as ish
+from .                      import assertshell      as ash
+from .                      import shellhelper      as sh
+from xmlparser.pombuilder   import PomBuilder
 
 def CreateNgApp(appName):
     Logger.Info("Creating {} as an angular app..".format(appName))

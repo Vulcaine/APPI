@@ -1,14 +1,14 @@
-from configuration import config
-from . import GitExtenderFactory
-from . import NodeExtender
-from . import AngularExtender
-from . import MongoExtender
-from . import ExpressExtender
-from . import DockerExtender
-from . import SpringMavenExtender
-from handlers import HandlerFactory
-from logger import Logger
+from configuration         import config
+from handlers              import HandlerFactory
+from logger                import Logger
 
+from .                     import GitExtenderFactory
+from .                     import NodeExtender
+from .                     import AngularExtender
+from .                     import MongoExtender
+from .                     import ExpressExtender
+from .                     import DockerExtender
+from .                     import SpringMavenExtender
 
 def Extend(which, args):
     if which == 'github':

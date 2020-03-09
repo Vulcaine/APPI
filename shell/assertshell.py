@@ -1,7 +1,7 @@
-from logger import Logger
-from . import installshell as installhelper
-from . import assertshell as asserter
-from . import shellhelper as sh
+from logger             import Logger
+from .                  import installshell         as installhelper
+from .                  import assertshell          as asserter
+from .                  import shellhelper          as sh
 
 def AssertCall(cmd):
     return sh.Call(cmd) == 0

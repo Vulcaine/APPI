@@ -1,5 +1,5 @@
-from shell import gitshell as gsh
-from logger import Logger
+from shell      import gitshell as gsh
+from logger     import Logger
 
 def Extend(args):
     if len(args) < 2:

@@ -2,12 +2,12 @@ import os.path
 import sys
 import json
 
-from configuration import config
+from configuration      import config
 
-from extenders import ExtenderFactory as EF
+from extenders          import ExtenderFactory  as EF
 
-from logger    import Logger
-from shell     import shellhelper as sh
+from logger             import Logger
+from shell              import shellhelper      as sh
 
 class CLIParser:
     def __init__(self, cml):

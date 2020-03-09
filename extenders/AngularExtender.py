@@ -1,7 +1,7 @@
-from shell import creatorshell as csh
-from extenders import extenderhelpers as helper
-from configuration import config
-from logger import Logger
+from shell          import creatorshell         as csh
+from extenders      import extenderhelpers      as helper
+from configuration  import config
+from logger         import Logger
 
 conf = config.GetConfig()
 
