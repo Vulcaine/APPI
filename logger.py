@@ -18,14 +18,14 @@ class Logger:
 
     @staticmethod
     def Input(message, c = 'magenta', end = '\n', attrs = []):
-        cprint(message, c, end = end, attrs = attrs)
+        cprint('[optional] ' + message, c, end = end, attrs = attrs)
         return 0
 
     @staticmethod
     def Required(message, c = 'red', end = '\n', attrs = []):
         attrs.append('underline')
 
-        cprint('!' + message, c, end = end, attrs = attrs)
+        cprint('[required] ' + message, c, end = end, attrs = attrs)
         return 0
 
     @staticmethod

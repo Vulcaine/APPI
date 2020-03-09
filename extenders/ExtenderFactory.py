@@ -28,7 +28,9 @@ def Extend(which, args):
     if which == 'docker':
         return DockerExtender.Extend(args)
     if which == 'spring-maven':
-        return SpringMavenExtender.Extend(args)
+        return SpringMavenExtender.Extend(args, which)
+    if which == 'spring-maven-module':
+        return SpringMavenExtender.Extend(args, which)
 
 def Handler(which):
     if which == 'git':

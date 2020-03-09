@@ -153,6 +153,15 @@ class CLIParser:
 
         return EF.Extend('spring-maven', args)
 
+    def AddSpringMavenModule(self, args):
+        if self.conf['app-type'] == 'virtualized':
+            return Logger.Error("This is already an {0} based repo, can't add this feature".format(self.conf['app-type']))
+
+        if not self.IsBackendTypeExists('spring-maven'):
+            return Logger.Error("This is not an spring-maven based repo, please add a root spring backend")
+
+        return EF.Extend('spring-maven-module', args)
+
     # TODO: Beletenni appi.json fájlba hogy milyen komponenseket adtunk hozzá
     # azzal eldönteni hogy lehet-e hozzáadni, nem az app-type alapján
     def AddNodeJS(self, args):

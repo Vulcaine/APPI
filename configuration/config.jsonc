@@ -27,6 +27,11 @@
             "function": "lambda args: self.ValidateRepository(self.AddSpringMaven, args)"
         },
 
+        "spring-maven-module": {
+            "aliases": [],
+            "function": "lambda args: self.ValidateRepository(self.AddSpringMavenModule, args)"
+        },
+
         "simple-express":
         {
             "aliases": ["express", "se"],
@@ -134,6 +139,12 @@
         "mongodb": [],
 
         "mean": []
+    },
+
+    "entrypoints":
+    {
+        "spring-maven": [ "./mvnw clean install", "./mvnw.cmd clean install" ],
+        "nodejs": [ "npm start" ]
     },
 
     "windows-service":

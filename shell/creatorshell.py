@@ -69,6 +69,7 @@ def CreateSpringRootApp(projectRoot = None,
         name = sh.ValuePrompt("name: ") or "Parent Spring App"
 
     companyName = sh.ValuePrompt("company name: ")
+    appFileName = sh.ValuePrompt("main class name: ")
 
     builder = PomBuilder()
 
@@ -96,5 +97,4 @@ def CreateSpringRootApp(projectRoot = None,
 
     builder.AddModule('module-1')
 
-    Logger.Info(builder.ToString())
-    return companyName, projectRoot
+    return companyName, projectRoot, builder.ToString(), appFileName
