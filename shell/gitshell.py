@@ -11,6 +11,9 @@ def GitStatus(args):
 def GitPush(args):
     return assertsh.AssertCall("git push")
 
+def GitPull(args):
+    return assertsh.AssertCall("git pull")
+
 def RegisterGitRemote(remote):
 
     if assertsh.AssertGitInstalled():

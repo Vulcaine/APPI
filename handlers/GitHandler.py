@@ -1,6 +1,7 @@
 from shell.gitshell import GitListBranch
 from shell.gitshell import GitStatus
 from shell.gitshell import GitPush
+from shell.gitshell import GitPull
 
 def ToBranch(args):
     return
@@ -18,7 +19,7 @@ def Push(args):
     return GitPush(args)
 
 def Pull(args):
-    return
+    return GitPull(args)
 
 def Diff(args):
     return

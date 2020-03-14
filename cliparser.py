@@ -98,6 +98,9 @@ class CLIParser:
     def GitPush(self, args):
         return EF.Handler('git').Push(args)
 
+    def GitPull(self, args):
+        return EF.Handler('git').Pull(args)
+
     def GitHubSetup(self, args):
         return EF.Extend('github', args)
 
