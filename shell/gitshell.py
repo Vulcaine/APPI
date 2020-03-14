@@ -8,6 +8,9 @@ def GitListBranch(args):
 def GitStatus(args):
     return assertsh.AssertCall("git status")
 
+def GitPush(args):
+    return assertsh.AssertCall("git push")
+
 def RegisterGitRemote(remote):
 
     if assertsh.AssertGitInstalled():
