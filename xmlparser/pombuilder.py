@@ -20,6 +20,8 @@ class PomBuilder:
         self.pluginManagement = None
         self.plugins = None
         self.properties = None
+        self.dependencyManagement = None
+        self.dependencyManagementDependencies = None
 
         modelVersion = self.root.Child('modelVersion', modelVersion)
 
@@ -41,6 +43,30 @@ class PomBuilder:
     def AddDependenciesRoot(self):
         self.dependencies = self.root.Child('dependencies')
         return self.dependencies
+
+    def AddDependencyManagementRoot(self):
+        self.dependencyManagement = self.root.Child('dependencyManagement')
+        return self.dependencyManagement
+
+    def AddDependencyManagementDependenciesRoot(self):
+        if not self.dependencyManagement:
+            self.AddDependencyManagementRoot()
+
+        self.dependencyManagementDependencies = self.dependencyManagement.Child('dependencies')
+        return self.dependencyManagementDependencies
+
+    def AddDependencyManagementDependency(self, groupId, artifactId, dtype, version, scope):
+        if not self.dependencyManagementDependencies:
+            self.AddDependencyManagementDependenciesRoot()
+
+        dependency = self.dependencyManagementDependencies.Child('dependency')
+        dependency.Child('groupId', groupId)
+        dependency.Child('artifactId', artifactId)
+        dependency.Child('type', dtype)
+        dependency.Child('version', version)
+        dependency.Child('scope', scope)
+
+        return dependency
 
     def AddParent(self, groupId, artifactId, version, isRelativePath = False):
         parent = self.root.Child('parent')

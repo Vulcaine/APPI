@@ -29,27 +29,21 @@ def GenerateSpringMainClass(groupId, mainClassName):
     return mainClass
 
 def ExtendRootApp(args):
+    SpringProjectRootDirName = 'spring-app'
+
     if len(args) == 1:
-        groupId, rootDir, pomContent, mainClassName = csh.CreateSpringRootApp()
+        groupId, rootDir, mainClassName, pomContent, modulePomContent = csh.CreateSpringRootApp()
     elif len(args) == 2:
-        groupId, rootDir, pomContent, mainClassName = csh.CreateSpringRootApp(args[1])
-    elif len(args) == 3:
-        groupId, rootDir, pomContent, mainClassName = csh.CreateSpringRootApp(args[1], args[2])
-    elif len(args) == 4:
-        groupId, rootDir, pomContent, mainClassName = csh.CreateSpringRootApp(args[1], args[2], args[3])
-    elif len(args) == 5:
-        groupId, rootDir, pomContent, mainClassName = csh.CreateSpringRootApp(args[1], args[2], args[3], args[4])
-    elif len(args) == 6:
-        groupId, rootDir, pomContent, mainClassName = csh.CreateSpringRootApp(args[1], args[2], args[3], args[4], args[5])
-    elif len(args) == 7:
-        groupId, rootDir, pomContent, mainClassName = csh.CreateSpringRootApp(args[1], args[2], args[3], args[4], args[5], args[6])
+        groupId, rootDir, mainClassName, pomContent, modulePomContent = csh.CreateSpringRootApp(
+            args[1])
 
     conf['app-type'] = 'non-virtualized'
 
-    srcPath = '{0}/src/main/java/{1}'.format(rootDir, groupId.replace(".", "/"))
-    testPath = '{0}/src/test'.format(rootDir)
-    resourcesPath = '{0}/src/main/java/resources'.format(rootDir)
-    pomPath = '{0}/pom.xml'.format(rootDir)
+    srcPath = '{0}/{1}/src/main/java/{2}'.format(SpringProjectRootDirName, rootDir, groupId.replace(".", "/"))
+    testPath = '{0}/{1}/src/test'.format(SpringProjectRootDirName, rootDir)
+    resourcesPath = '{0}/{1}/src/main/java/resources'.format(SpringProjectRootDirName, rootDir)
+    pomPath = '{0}/pom.xml'.format(SpringProjectRootDirName)
+    modulePomPath = '{0}/{1}/pom.xml'.format(SpringProjectRootDirName, rootDir)
     springAppFileNamePath = '{0}/{1}.java'.format(srcPath, mainClassName)
 
     backendFeature = {
@@ -58,12 +52,16 @@ def ExtendRootApp(args):
             'backend':
             {
                 'type': 'spring-maven',
-                'root-directory': rootDir,
-                'src': srcPath,
-                'resources': resourcesPath,
+                'root-directory': SpringProjectRootDirName,
                 'company-name': groupId,
-                'modules': [],
-                'entrypoint': "cd {0} && {1}".format(rootDir, conf['entrypoints']['spring-maven'][sys.platform])
+                'modules': [
+                    {
+                        'root-directory': rootDir,
+                        'src': srcPath,
+                        'resources': resourcesPath,
+                    }
+                ],
+                'entrypoint': "cd {0} && {1}".format(SpringProjectRootDirName, conf['entrypoints']['spring-maven'][sys.platform])
             }
         }
     }
@@ -81,17 +79,24 @@ def ExtendRootApp(args):
     pomFile.write(pomContent)
     pomFile.close()
 
+    pomFile = open(modulePomPath, 'w')
+    pomFile.write(modulePomContent)
+    pomFile.close()
+
     # TODO: install maven for it
     # need solution to install latest
     Logger.Info('Installing maven wrapper..')
     mvnwVersion = sh.ValuePrompt("maven wrapper version (3.3.3): ") or "3.3.3"
-    if not ash.AssertCall("cd {0} && mvn -N io.takari:maven:wrapper -Dmaven={1}".format(rootDir, mvnwVersion)):
+    if not ash.AssertCall("cd {0} && mvn -N io.takari:maven:wrapper -Dmaven={1}".format(SpringProjectRootDirName, mvnwVersion)):
         Logger.Error("Error during maver wrapper installation")
         return sys.exit()
 
     conf.update(backendFeature)
     config.WriteAppiConfig({ "app-type": conf['app-type'] })
     config.WriteAppiConfig({ "features": conf['features'] })
+
+    Logger.Success("Spring app created on path: {}".format(
+        SpringProjectRootDirName))
 
 def ExtendModule(args):
     return

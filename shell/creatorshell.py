@@ -49,50 +49,57 @@ def InstallMongoDB():
 
     return Logger.Success("Mongo is installed in {0}.".format(installdir))
 
-def CreateSpringRootApp(projectRoot = None,
-                        groupId = None,
-                        artifactId = None,
-                        packaging = None,
-                        version = None,
-                        name = None):
-    if not projectRoot:
+def CreateSpringRootApp(isDefault = None):
+
+    if isDefault == '-d':
         projectRoot = sh.ValuePrompt("project root directory: ", required = True)
-    if not groupId:
+        groupId = "com.mycompany"
+        artifactId = "spring-boot"
+        packaging = "pom"
+        version = "1.0-SNAPSHOT"
+        name = "Parent Spring App"
+        appFileName = "SpringMain"
+        javaVersion = "1.8"
+    else:
+        projectRoot = sh.ValuePrompt("project root directory: ", required = True)
         groupId = sh.ValuePrompt(
             "company package (com.mycompany): ") or "com.mycompany"
-    if not artifactId:
         artifactId = sh.ValuePrompt("project name (spring-boot): ") or "spring-boot"
-    if not packaging:
-        packaging = sh.ValuePrompt("packaging (pom): ") or "pom"
-    if not version:
+        packaging = sh.ValuePrompt("packaging (jar): ") or "jar"
         version = sh.ValuePrompt("version (1.0-SNAPSHOT): ") or "1.0-SNAPSHOT"
-    if not name:
         name = sh.ValuePrompt("name (Parent Spring App): ") or "Parent Spring App"
+        appFileName = sh.ValuePrompt("main class name (Main): ") or "SpringMain"
+        javaVersion = sh.ValuePrompt("Java version (1.8): ") or "1.8"
 
-    appFileName = sh.ValuePrompt("main class name (Main): ") or "Main"
-    javaVersion = sh.ValuePrompt("Java version (1.8): ") or "1.8"
+    rootPomBuilder = PomBuilder()
+    modulePomBuilder = PomBuilder()
 
-    builder = PomBuilder()
+    rootPomBuilder.SetArtifactId('spring-parent')
+    rootPomBuilder.SetGroupId(groupId)
+    rootPomBuilder.SetVersion(version)
+    rootPomBuilder.SetPackaging('pom')
+    rootPomBuilder.SetName('Parent Spring App')
 
-    builder.SetArtifactId(artifactId)
-    builder.SetGroupId(groupId)
-    #builder.SetPackaging(packaging)
-    builder.SetVersion(version)
-    builder.SetName(name)
+    rootPomBuilder.AddModule(projectRoot)
 
-    builder.AddProperty(
+    modulePomBuilder.SetArtifactId(artifactId)
+    modulePomBuilder.SetGroupId(groupId + '.' + projectRoot)
+    modulePomBuilder.SetPackaging(packaging)
+    modulePomBuilder.SetName(name)
+
+    modulePomBuilder.AddProperty(
         'java.version',
         javaVersion
     )
 
-    builder.AddParent(
+    modulePomBuilder.AddParent(
         'org.springframework.boot',
         'spring-boot-starter-parent',
-        '2.2.2.RELEASE',
+        '2.2.5.RELEASE',
         True
     )
 
-    builder.AddPlugin(
+    modulePomBuilder.AddPlugin(
         'org.apache.maven.plugins',
         'maven-compiler-plugin',
         {
@@ -101,24 +108,32 @@ def CreateSpringRootApp(projectRoot = None,
         }
     )
 
-    builder.AddPlugin(
+    modulePomBuilder.AddPlugin(
         'org.springframework.boot',
         'spring-boot-maven-plugin'
     )
 
-    builder.AddDependency(
+    modulePomBuilder.AddDependency(
         'org.springframework.boot',
         'spring-boot-starter-web',
         '2.2.5.RELEASE',
     )
 
-    builder.AddDependency(
+    modulePomBuilder.AddDependency(
         'junit',
         'junit',
         '3.8.1',
         'test'
     )
 
-    #builder.AddModule('module-1')
+    '''
+    modulePomBuilder.AddDependencyManagementDependency(
+        'org.springframework.boot',
+        'spring-boot-dependencies',
+        'pom',
+        '2.0.2.RELEASE',
+        'import'
+    )
+    '''
 
-    return groupId, projectRoot, builder.ToString(), appFileName
+    return groupId, projectRoot, appFileName, rootPomBuilder.ToString(), modulePomBuilder.ToString()

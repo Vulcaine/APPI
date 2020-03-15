@@ -41,7 +41,7 @@
         "start":
         {
             "aliases": [],
-            "function": "lambda args: self.ValidateRepository(self.Start, args)"
+            "function": "lambda args: self.Start(args)"
         },
 
         "github-setup":
