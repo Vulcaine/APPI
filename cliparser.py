@@ -23,13 +23,19 @@ class CLIParser:
         self.OPTIONS = self.conf['cli-options']
         self.ADD_OPTIONS = self.conf['cli-add-options']
 
+    def GetUsageOf(self, option = None):
+        if not option:
+            return 'appi <cli option>'
+        return self.OPTIONS[option]['usage']
+
     def GetCMDOptions(self):
         if len(self.commandLine) <= self.cmCursor:
             return sys.exit()
 
-        options = [ self.commandLine[self.cmCursor] ]
+        options = self.commandLine[self.cmCursor:]
         tempCursor = self.cmCursor + 1
 
+        '''
         while(
                 len(self.commandLine) > tempCursor and (
                 not ( self.commandLine[tempCursor] in self.OPTIONS )
@@ -45,6 +51,7 @@ class CLIParser:
             options.append(self.commandLine[tempCursor])
             tempCursor += 1
             self.cmCursor += 1
+        '''
 
         return options
 
@@ -98,6 +105,15 @@ class CLIParser:
 
     def GitHubSetup(self, args):
         return EF.Extend('github', args)
+
+    def Help(self, args):
+        aliases = self.OPTIONS[args[0]]['aliases']
+        aliasString = ''
+        if len(aliases) > 0:
+            aliasString = 'aliases: ' + ','.join(aliases)
+        if len(args) >= 2:
+            return Logger.Info('Usage off {0} is: \n{1}\n{2}'.format(args[0], self.GetUsageOf(args[1]), aliasString))
+        return Logger.Info('Usage of {0} is: \n{1}\n{2}'.format(args[0], self.GetUsageOf(args[0]), aliasString))
 
     def Start(self, args):
         if self.IsValidAppiRepository():
@@ -209,7 +225,7 @@ class CLIParser:
         self.cmCursor += 1
 
         if len(self.commandLine) == 1:
-            return Logger.Error("You have to specify options")
+            return Logger.Error("You have to specify options {}".format(self.GetUsageOf()))
 
         cmdOptions = self.GetCMDOptions()
         for k, option in self.OPTIONS.items():

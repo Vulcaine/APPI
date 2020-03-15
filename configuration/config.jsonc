@@ -7,100 +7,123 @@
 
     "cli-options":
     {
+        "help": {
+            "aliases": [],
+            "function": "lambda args: self.Help(args)",
+            "usage": "appi help <appi cli option>"
+        },
+
         "--version": {
             "aliases": ["-v"],
-            "function": "lambda args: self.Version(args)"
+            "function": "lambda args: self.Version(args)",
+            "usage": "appi --version"
         },
 
         "init": {
             "aliases": ["i"],
-            "function": "lambda args: self.Init(args)"
+            "function": "lambda args: self.Init(args)",
+            "usage": "appi init"
         },
 
         "feature":  {
             "aliases": [],
-            "function": "lambda args: self.ValidateRepository(self.Add, args)"
+            "function": "lambda args: self.ValidateRepository(self.Add, args)",
+            "usage": "appi feature <backend or frontend feature ex: angular, spring-maven>"
         },
 
         "spring-maven": {
             "aliases": [],
-            "function": "lambda args: self.ValidateRepository(self.AddSpringMaven, args)"
+            "function": "lambda args: self.ValidateRepository(self.AddSpringMaven, args)",
+            "usage": "appi spring-maven"
         },
 
         "spring-maven-module": {
             "aliases": [],
-            "function": "lambda args: self.ValidateRepository(self.AddSpringMavenModule, args)"
+            "function": "lambda args: self.ValidateRepository(self.AddSpringMavenModule, args)",
+            "usage": "appi spring-maven-module"
         },
 
         "simple-express":
         {
             "aliases": ["express", "se"],
-            "function": "lambda args: self.ValidateRepository(self.InitSimpleExpressApp, args)"
+            "function": "lambda args: self.ValidateRepository(self.InitSimpleExpressApp, args)",
+            "usage": "appi simple-express"
         },
 
         "start":
         {
             "aliases": [],
-            "function": "lambda args: self.Start(args)"
+            "function": "lambda args: self.Start(args)",
+            "usage": "appi start"
         },
 
         "github-setup":
         {
             "aliases": [],
-            "function": "lambda args: self.ValidateRepository(self.GitHubSetup, args)"
+            "function": "lambda args: self.ValidateRepository(self.GitHubSetup, args)",
+            "usage": "appi github-setup <user name> <repository name>"
         },
 
         "git-status":
         {
             "aliases": ["status"],
-            "function": "lambda args: self.GitStatus(args)"
+            "function": "lambda args: self.GitStatus(args)",
+            "usage": "appi git-status"
         },
 
         "git-list-branch":
         {
             "aliases": ["branch"],
-            "function": "lambda args: self.GitListBranch(args)"
+            "function": "lambda args: self.GitListBranch(args)",
+            "usage": "appi git-list-branch"
         },
 
         "git-checkout-branch":
         {
             "aliases": ["checkout", "switch-branch"],
-            "function": "lambda args: self.GitCheckoutBranch(args)"
+            "function": "lambda args: self.GitCheckoutBranch(args)",
+            "usage": "appi git-checkout-branch <branch name>"
         },
 
         "git-create-branch":
         {
             "aliases": ["new-branch", "newb"],
-            "function": "lambda args: self.GitCreateBranch(args)"
+            "function": "lambda args: self.GitCreateBranch(args)",
+            "usage": "appi git-create-branch <branch name>"
         },
 
         "git-push":
         {
             "aliases": ["push"],
-            "function": "lambda args: self.GitPush(args)"
+            "function": "lambda args: self.GitPush(args)",
+            "usage": "appi git-push"
         },
 
         "git-pull":
         {
             "aliases": ["pull"],
-            "function": "lambda args: self.GitPull(args)"
+            "function": "lambda args: self.GitPull(args)",
+            "usage": "appi git-pull"
         },
 
         "git-add":
         {
             "aliases": ["add"],
-            "function": "lambda args: self.GitAdd(args)"
+            "function": "lambda args: self.GitAdd(args)",
+            "usage": "appi git-add <file name>, ..."
         },
 
         "git-commit":
         {
             "aliases": ["commit"],
-            "function": "lambda args: self.GitCommit(args)"
+            "function": "lambda args: self.GitCommit(args)",
+            "usage": "appi git-commit \"message\" "
         },
 
         "download": {
             "aliases": [],
-            "function": "lambda args: self.Download(args)"
+            "function": "lambda args: self.Download(args)",
+            "usage": "appi download <url> <download path>"
         }
     },
 
