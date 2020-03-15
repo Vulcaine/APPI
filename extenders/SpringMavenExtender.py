@@ -39,9 +39,12 @@ def ExtendRootApp(args):
 
     conf['app-type'] = 'non-virtualized'
 
-    srcPath = '{0}/{1}/src/main/java/{2}'.format(SpringProjectRootDirName, rootDir, groupId.replace(".", "/"))
+    src = 'src/main/java'
+    resources = 'resources'
+
+    srcPath = '{0}/{1}/{2}/{3}'.format(SpringProjectRootDirName, rootDir, src, groupId.replace(".", "/"))
     testPath = '{0}/{1}/src/test'.format(SpringProjectRootDirName, rootDir)
-    resourcesPath = '{0}/{1}/src/main/java/resources'.format(SpringProjectRootDirName, rootDir)
+    resourcesPath = '{0}/{1}/{2}/{3}'.format(SpringProjectRootDirName, rootDir, src, resources)
     pomPath = '{0}/pom.xml'.format(SpringProjectRootDirName)
     modulePomPath = '{0}/{1}/pom.xml'.format(SpringProjectRootDirName, rootDir)
     springAppFileNamePath = '{0}/{1}.java'.format(srcPath, mainClassName)
@@ -57,8 +60,8 @@ def ExtendRootApp(args):
                 'modules': [
                     {
                         'root-directory': rootDir,
-                        'src': srcPath,
-                        'resources': resourcesPath,
+                        'src': src,
+                        'resources': resources,
                     }
                 ],
                 'entrypoint': "cd {0} && {1}".format(SpringProjectRootDirName, conf['entrypoints']['spring-maven'][sys.platform])
@@ -99,6 +102,49 @@ def ExtendRootApp(args):
         SpringProjectRootDirName))
 
 def ExtendModule(args):
+    rootAppPath = config.GetRelativePath(conf['features']['backend']['root-directory'])
+
+    mainClassName, groupId, moduleDir, pomContent, modulePomContent = csh.CreateSpringModule()
+
+    src = 'src/main/java'
+    resources = 'resources'
+
+    srcPath = '{0}/{1}/{2}/{3}'.format(rootAppPath,
+                                       moduleDir, src, groupId.replace(".", "/"))
+    testPath = '{0}/{1}/src/test'.format(rootAppPath, moduleDir)
+    resourcesPath = '{0}/{1}/{2}/{3}'.format(
+        rootAppPath, moduleDir, src, resources)
+    pomPath = '{0}/pom.xml'.format(rootAppPath)
+    modulePomPath = '{0}/{1}/pom.xml'.format(rootAppPath, moduleDir)
+    springAppFileNamePath = '{0}/{1}.java'.format(srcPath, mainClassName)
+
+    moduleFeature =  {
+        'root-directory': moduleDir,
+        'src': src,
+        'resources': resources,
+    }
+
+    os.makedirs(testPath, exist_ok=False)
+    os.makedirs(srcPath, exist_ok=False)
+    os.makedirs(resourcesPath, exist_ok=False)
+
+    springMainContent = GenerateSpringMainClass(groupId, mainClassName)
+    springAppFile = open(springAppFileNamePath, 'w')
+    springAppFile.write(springMainContent)
+    springAppFile.close()
+
+    pomFile = open(pomPath, 'w')
+    pomFile.write(pomContent)
+    pomFile.close()
+
+    pomFile = open(modulePomPath, 'w')
+    pomFile.write(modulePomContent)
+    pomFile.close()
+
+    conf['features']['backend']['modules'].append(moduleFeature)
+    config.WriteAppiConfig({"app-type": conf['app-type']})
+    config.WriteAppiConfig({"features": conf['features']})
+
     return
 
 def Extend(args, which):

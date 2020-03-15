@@ -1,3 +1,5 @@
+import os
+
 from logger                 import Logger
 from configuration          import config
 
@@ -48,6 +50,71 @@ def InstallMongoDB():
             Logger.Alert("Make sure to add this path to env")
 
     return Logger.Success("Mongo is installed in {0}.".format(installdir))
+
+def CreateSpringModule():
+    conf = config.GetConfig()
+
+    pomRoot = config.GetRelativePath(conf['features']['backend']['root-directory'])
+    rootPomBuilder = PomBuilder.Parse(os.path.join(pomRoot, 'pom.xml'))
+
+    projectRoot = sh.ValuePrompt("module directory: ", required = True)
+    groupId = sh.ValuePrompt(
+        "company package (com.mycompany): ") or "com.mycompany"
+    artifactId = sh.ValuePrompt(
+        "module name (spring-boot): ") or "spring-boot"
+    packaging = sh.ValuePrompt("packaging (jar): ") or "jar"
+    name = sh.ValuePrompt("name (Parent Spring App): ") or "Parent Spring App"
+    appFileName = sh.ValuePrompt("main class name (Main): ") or "SpringMain"
+    javaVersion = sh.ValuePrompt("Java version (1.8): ") or "1.8"
+
+    modulePomBuilder = PomBuilder()
+    rootPomBuilder.AddModule(artifactId)
+
+    modulePomBuilder.SetArtifactId(artifactId)
+    modulePomBuilder.SetGroupId(groupId)
+    modulePomBuilder.SetName(name)
+    modulePomBuilder.SetPackaging(packaging)
+
+    modulePomBuilder.AddProperty(
+        'java.version',
+        javaVersion
+    )
+
+    modulePomBuilder.AddParent(
+        'org.springframework.boot',
+        'spring-boot-starter-parent',
+        '2.2.5.RELEASE',
+        True
+    )
+
+    modulePomBuilder.AddPlugin(
+        'org.apache.maven.plugins',
+        'maven-compiler-plugin',
+        {
+            'source': '1.6',
+            'target': '1.6'
+        }
+    )
+
+    modulePomBuilder.AddPlugin(
+        'org.springframework.boot',
+        'spring-boot-maven-plugin'
+    )
+
+    modulePomBuilder.AddDependency(
+        'org.springframework.boot',
+        'spring-boot-starter-web',
+        '2.2.5.RELEASE',
+    )
+
+    modulePomBuilder.AddDependency(
+        'junit',
+        'junit',
+        '3.8.1',
+        'test'
+    )
+
+    return appFileName, groupId, projectRoot, rootPomBuilder.ToString(), modulePomBuilder.ToString()
 
 def CreateSpringRootApp(isDefault = None):
 

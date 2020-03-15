@@ -13,6 +13,9 @@ def GetScriptPath(filePath = __file__):
 def GetRootPath():
     return GetScriptPath('../appi.py')
 
+def GetRelativePath(path):
+    return os.path.join(os.getcwd(), path)
+
 def GetWorkDir():
     return os.getcwd()
 

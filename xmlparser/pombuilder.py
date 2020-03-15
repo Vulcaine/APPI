@@ -1,29 +1,49 @@
 from xmlparser.xmlbuilder       import XMLBuilder
 
 class PomBuilder:
-    def __init__(self, modelVersion = '4.0.0'):
-        self.builder = XMLBuilder()
+    @staticmethod
+    def Parse(xmlFile):
+        xmlBuilder = XMLBuilder.Parse(xmlFile)
+        return PomBuilder(xmlBuilder = xmlBuilder,)
 
-        xmlns = "http://maven.apache.org/POM/4.0.0".format(modelVersion)
-        xmlns_xsi = "http://www.w3.org/2001/XMLSchema-instance"
-        xsi_schemaLocation = "{0} http://maven.apache.org/maven-v4_0_0.xsd".format(xmlns)
+    def __init__(self, modelVersion = '4.0.0', xmlBuilder = None):
+        if xmlBuilder:
+            self.builder = xmlBuilder
 
-        self.root = self.builder.Root('project')
+            self.root = self.builder.GetRoot()
 
-        self.root.SetProperty('xmlns', xmlns)
-        self.root.SetProperty('xmlns:xsi', xmlns_xsi)
-        self.root.SetProperty('xsi:schemaLocation', xsi_schemaLocation)
+            self.modules = self.builder.GetElement('modules', self.root)
+            self.dependencies = self.builder.GetElement('dependencies', self.root)
+            self.build = self.builder.GetElement('build', self.root)
+            self.pluginManagement = self.builder.GetElement('pluginManagement', self.build)
+            self.plugins = self.builder.GetElement('plugins', self.pluginManagement)
+            self.properties = self.builder.GetElement('properties', self.root)
+            self.dependencyManagement = self.builder.GetElement('dependencyManagement', self.root)
+            self.dependencyManagementDependencies = self.builder.GetElement(
+                'dependencies', self.dependencyManagement)
+        else:
+            self.builder = XMLBuilder()
 
-        self.modules = None
-        self.dependencies = None
-        self.build = None
-        self.pluginManagement = None
-        self.plugins = None
-        self.properties = None
-        self.dependencyManagement = None
-        self.dependencyManagementDependencies = None
+            xmlns = "http://maven.apache.org/POM/4.0.0".format(modelVersion)
+            xmlns_xsi = "http://www.w3.org/2001/XMLSchema-instance"
+            xsi_schemaLocation = "{0} http://maven.apache.org/maven-v4_0_0.xsd".format(xmlns)
 
-        modelVersion = self.root.Child('modelVersion', modelVersion)
+            self.root = self.builder.Root('project')
+
+            self.root.SetProperty('xmlns', xmlns)
+            self.root.SetProperty('xmlns:xsi', xmlns_xsi)
+            self.root.SetProperty('xsi:schemaLocation', xsi_schemaLocation)
+
+            self.modules = None
+            self.dependencies = None
+            self.build = None
+            self.pluginManagement = None
+            self.plugins = None
+            self.properties = None
+            self.dependencyManagement = None
+            self.dependencyManagementDependencies = None
+
+            modelVersion = self.root.Child('modelVersion', modelVersion)
 
     def AddModulesRoot(self):
         self.modules = self.root.Child('modules')

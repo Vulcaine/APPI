@@ -1,4 +1,4 @@
-from xml.etree.ElementTree  import Element, SubElement, Comment, tostring, XML
+from xml.etree.ElementTree  import Element, SubElement, Comment, tostring, XML, parse as ETParse
 from xml.dom                import minidom
 
 def _prettify(elem):
@@ -9,8 +9,11 @@ def _prettify(elem):
     return reparsed.toprettyxml(indent="  ")
 
 class XMLElement:
-    def __init__(self, name):
-        self.element = Element(name)
+    def __init__(self, name = 'child', element = None):
+        if element:
+            self.element = element
+        else:
+            self.element = Element(name)
 
     def SetProperty(self, pName, pVal):
         self.element.set(pName, pVal)
@@ -52,8 +55,25 @@ class XMLSubElement(XMLElement):
         self.element = SubElement(parent, name)
 
 class XMLBuilder:
-    def __init__(self):
-        self.root = None
+    @staticmethod
+    def Parse(xmlFile):
+        return XMLBuilder(ETParse(xmlFile).getroot())
+
+    def __init__(self, root = None):
+        self.root = XMLElement(element = root)
+
+    def GetRoot(self):
+        return self.root
+
+    def GetElement(self, name, sroot = None):
+        if not sroot:
+            return None
+
+        for child in sroot.GetElement():
+            if name in child.tag:
+                return XMLElement(element = child)
+
+        return None
 
     def Root(self, name):
         self.root = XMLElement(name)
