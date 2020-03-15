@@ -58,34 +58,58 @@ def CreateSpringRootApp(projectRoot = None,
     if not projectRoot:
         projectRoot = sh.ValuePrompt("project root directory: ", required = True)
     if not groupId:
-        groupId = sh.ValuePrompt("groupId: ", required = True)
+        groupId = sh.ValuePrompt(
+            "company package (com.mycompany): ") or "com.mycompany"
     if not artifactId:
-        artifactId = sh.ValuePrompt("artifactId: ") or "spring-parent"
+        artifactId = sh.ValuePrompt("project name (spring-boot): ") or "spring-boot"
     if not packaging:
-        packaging = sh.ValuePrompt("packaging: ") or "pom"
+        packaging = sh.ValuePrompt("packaging (pom): ") or "pom"
     if not version:
-        version = sh.ValuePrompt("version: ") or "1.0.0"
+        version = sh.ValuePrompt("version (1.0-SNAPSHOT): ") or "1.0-SNAPSHOT"
     if not name:
-        name = sh.ValuePrompt("name: ") or "Parent Spring App"
+        name = sh.ValuePrompt("name (Parent Spring App): ") or "Parent Spring App"
 
-    companyName = sh.ValuePrompt("company name: ")
-    appFileName = sh.ValuePrompt("main class name: ")
+    appFileName = sh.ValuePrompt("main class name (Main): ") or "Main"
+    javaVersion = sh.ValuePrompt("Java version (1.8): ") or "1.8"
 
     builder = PomBuilder()
 
     builder.SetArtifactId(artifactId)
     builder.SetGroupId(groupId)
-    builder.SetPackaging(packaging)
+    #builder.SetPackaging(packaging)
     builder.SetVersion(version)
     builder.SetName(name)
+
+    builder.AddProperty(
+        'java.version',
+        javaVersion
+    )
+
+    builder.AddParent(
+        'org.springframework.boot',
+        'spring-boot-starter-parent',
+        '2.2.2.RELEASE',
+        True
+    )
 
     builder.AddPlugin(
         'org.apache.maven.plugins',
         'maven-compiler-plugin',
         {
-            'source': '1.5',
-            'target': '1.5'
+            'source': '1.6',
+            'target': '1.6'
         }
+    )
+
+    builder.AddPlugin(
+        'org.springframework.boot',
+        'spring-boot-maven-plugin'
+    )
+
+    builder.AddDependency(
+        'org.springframework.boot',
+        'spring-boot-starter-web',
+        '2.2.5.RELEASE',
     )
 
     builder.AddDependency(
@@ -95,6 +119,6 @@ def CreateSpringRootApp(projectRoot = None,
         'test'
     )
 
-    builder.AddModule('module-1')
+    #builder.AddModule('module-1')
 
-    return companyName, projectRoot, builder.ToString(), appFileName
+    return groupId, projectRoot, builder.ToString(), appFileName

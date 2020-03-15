@@ -5,20 +5,16 @@ from logger             import Logger
 
 config = {}
 
-with open(os.getcwd() + '/configuration/config.jsonc', 'r') as outfile:
-        config['features'] = {}
-        config['features']['backend'] = {}
-        config['features']['frontend'] = {}
-        config['features']['database'] = {}
+def GetScriptPath(filePath = __file__):
+    absFilePath = os.path.abspath(filePath)
+    path, filename = os.path.split(absFilePath)
+    return path, filename
 
-        config = json.load(outfile)
+def GetRootPath():
+    return GetScriptPath('../appi.py')
 
-try:
-        with open(os.getcwd() + '/appi.json', 'r') as outfile:
-                config = { **config, **json.load(outfile) }
-
-except:
-        Logger.Warn('appi.json does not exists')
+def GetWorkDir():
+    return os.getcwd()
 
 def GetConfig():
     return config
@@ -35,3 +31,18 @@ def WriteAppiConfig(conf):
         with open(config['root-file'], 'w') as appiFile:
                 appiFile.write(json.dumps(appiConfig))
                 appiFile.close()
+
+with open(GetScriptPath()[0] + '/config.jsonc', 'r') as outfile:
+    config['features'] = {}
+    config['features']['backend'] = {}
+    config['features']['frontend'] = {}
+    config['features']['database'] = {}
+
+    config = json.load(outfile)
+
+try:
+    with open(os.getcwd() + '/appi.json', 'r') as outfile:
+        config = {**config, **json.load(outfile)}
+
+except:
+    Logger.Warn('appi.json does not exists')

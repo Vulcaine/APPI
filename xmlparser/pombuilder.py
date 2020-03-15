@@ -18,6 +18,8 @@ class PomBuilder:
         self.dependencies = None
         self.build = None
         self.pluginManagement = None
+        self.plugins = None
+        self.properties = None
 
         modelVersion = self.root.Child('modelVersion', modelVersion)
 
@@ -40,6 +42,33 @@ class PomBuilder:
         self.dependencies = self.root.Child('dependencies')
         return self.dependencies
 
+    def AddParent(self, groupId, artifactId, version, isRelativePath = False):
+        parent = self.root.Child('parent')
+        parent.Child('groupId', groupId)
+        parent.Child('artifactId', artifactId)
+        parent.Child('version', version)
+
+        if isRelativePath:
+            parent.Child('relativePath')
+
+    def AddPluginsRoot(self):
+        if not self.pluginManagement:
+	        self.AddPluginManagementRoot()
+
+        self.plugins = self.pluginManagement.Child("plugins")
+        return self.plugins
+
+    def AddPropertiesRoot(self):
+        self.properties = self.root.Child('properties')
+        return self.properties
+
+    def AddProperty(self, propertyKey, propertyValue):
+        if not self.properties:
+            self.AddPropertiesRoot()
+
+        prop = self.properties.Child(propertyKey, propertyValue)
+        return prop
+
     def AddPluginManagementRoot(self):
         if not self.build:
             self.AddBuildRoot()
@@ -47,10 +76,10 @@ class PomBuilder:
         self.pluginManagement = self.build.Child('pluginManagement')
 
     def AddPlugin(self, groupId, artifactId, configuration = {}):
-        if not self.pluginManagement:
-            self.AddPluginManagementRoot()
+        if not self.plugins:
+            self.AddPluginsRoot()
 
-        plugin = self.pluginManagement.Child('plugin')
+        plugin = self.plugins.Child('plugin')
         plugin.Child('groupId', groupId)
         plugin.Child('artifactId', artifactId)
 
@@ -59,7 +88,7 @@ class PomBuilder:
 
         return plugin
 
-    def AddDependency(self, groupId, artifactId, version, scope):
+    def AddDependency(self, groupId, artifactId, version, scope = None):
         if not self.dependencies:
             self.AddDependenciesRoot()
 
@@ -68,7 +97,9 @@ class PomBuilder:
         d.Child('groupId', groupId)
         d.Child('artifactId', artifactId)
         d.Child('version', version)
-        d.Child('scope', scope)
+
+        if scope:
+            d.Child('scope', scope)
 
         return d
 

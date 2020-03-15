@@ -49,7 +49,7 @@ class CLIParser:
         return options
 
     def OpenRepository(self):
-        self.rootFile = open(self.rootFileName, "r+")
+        self.rootFile = open(os.path.join(os.getcwd(), self.rootFileName), "r+")
         repoConfig = json.load(self.rootFile)
 
         if 'app-type' in repoConfig:
@@ -61,14 +61,15 @@ class CLIParser:
         self.rootFile.close()
 
     def CreateRepository(self):
-        self.rootFile = open(self.rootFileName, "w+")
+        self.rootFile = open(os.path.join(
+            os.getcwd(), self.rootFileName), "w+")
         self.rootFile.write(json.dumps({ "version": self.conf['version'] }))
         self.rootFile.close()
 
         return True
 
     def IsValidAppiRepository(self):
-        if os.path.isfile('./' + self.rootFileName):
+        if os.path.isfile(os.path.join(os.getcwd(), self.rootFileName)):
             return True
         return False
 
@@ -99,6 +100,13 @@ class CLIParser:
         return EF.Extend('github', args)
 
     def Start(self, args):
+        if self.IsValidAppiRepository():
+            for feature in self.conf['features']:
+                if 'entrypoint' in self.conf['features'][feature]:
+                    entrypoint = self.conf['features'][feature]['entrypoint']
+                    sh.Call(entrypoint)
+        else:
+            Logger.Error("This is not an appi repository")
         return
 
     def Download(self, args):

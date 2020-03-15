@@ -143,8 +143,16 @@
 
     "entrypoints":
     {
-        "spring-maven": [ "./mvnw clean install", "./mvnw.cmd clean install" ],
-        "nodejs": [ "npm start" ]
+        "spring-maven": {
+            "linux": "mvnw spring-boot:run",
+            "linux2": "mvnw spring-boot:run",
+            "win32": "mvnw.cmd spring-boot:run"
+        },
+        "nodejs": {
+            "linux": "npm start",
+            "linux2": "npm start",
+            "win32": "npm start"
+        }
     },
 
     "windows-service":
