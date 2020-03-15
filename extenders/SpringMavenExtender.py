@@ -95,7 +95,7 @@ def ExtendRootApp(args):
     config.WriteAppiConfig({ "app-type": conf['app-type'] })
     config.WriteAppiConfig({ "features": conf['features'] })
 
-    Logger.Success("Spring app created on path: {}".format(
+    Logger.Success("Spring app created on path: {}. Feel free to type `appi start`".format(
         SpringProjectRootDirName))
 
 def ExtendModule(args):

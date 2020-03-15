@@ -29,7 +29,7 @@ def WriteAppiConfig(conf):
         appiFile.close()
 
         with open(config['root-file'], 'w') as appiFile:
-                appiFile.write(json.dumps(appiConfig))
+                appiFile.write(json.dumps(appiConfig, indent = 4, sort_keys = True))
                 appiFile.close()
 
 with open(GetScriptPath()[0] + '/config.jsonc', 'r') as outfile:
