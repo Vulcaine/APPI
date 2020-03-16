@@ -1,12 +1,14 @@
-from xml.etree.ElementTree  import Element, SubElement, Comment, tostring, XML, parse as ETParse
+import os
+
+from xml.etree.ElementTree  import Element, SubElement, Comment, tostring, XML, parse as ETParse, register_namespace
 from xml.dom                import minidom
 
-def _prettify(elem):
+def _prettify(elem, indent = "  ", newl = ''):
     """Return a pretty-printed XML string for the Element.
     """
     rough_string = tostring(elem, 'utf-8')
     reparsed = minidom.parseString(rough_string)
-    return reparsed.toprettyxml(indent="  ")
+    return reparsed.toprettyxml(indent = indent, newl = newl)
 
 class XMLElement:
     def __init__(self, name = 'child', element = None):
@@ -56,7 +58,8 @@ class XMLSubElement(XMLElement):
 
 class XMLBuilder:
     @staticmethod
-    def Parse(xmlFile):
+    def Parse(xmlFile, namespace = ''):
+        register_namespace('', namespace)
         return XMLBuilder(ETParse(xmlFile).getroot())
 
     def __init__(self, root = None):
@@ -83,4 +86,5 @@ class XMLBuilder:
         return XML(xml)
 
     def ToString(self):
-        return _prettify(self.root.GetElement())
+        prettified = _prettify(self.root.GetElement(), newl='\n')
+        return '\r'.join([ s for s in prettified.splitlines() if s.strip() ])

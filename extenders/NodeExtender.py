@@ -10,7 +10,7 @@ def Extend(args):
     sh.InitNodejsBackend(switch)
 
     conf['app-type'] = 'non-virtualized'
-    conf['features']['backend'] = { 'type': 'nodejs', 'modules': [] }
+    conf['features']['backend'] = { 'type': 'nodejs', 'modules': {} }
 
     config.WriteAppiConfig({ "app-type": conf['app-type'] })
     config.WriteAppiConfig({ "features": conf['features'] })

@@ -2,8 +2,8 @@ from xmlparser.xmlbuilder       import XMLBuilder
 
 class PomBuilder:
     @staticmethod
-    def Parse(xmlFile):
-        xmlBuilder = XMLBuilder.Parse(xmlFile)
+    def Parse(xmlFile, namespace = 'http://maven.apache.org/POM/4.0.0'):
+        xmlBuilder = XMLBuilder.Parse(xmlFile, namespace)
         return PomBuilder(xmlBuilder = xmlBuilder,)
 
     def __init__(self, modelVersion = '4.0.0', xmlBuilder = None):
@@ -44,6 +44,9 @@ class PomBuilder:
             self.dependencyManagementDependencies = None
 
             modelVersion = self.root.Child('modelVersion', modelVersion)
+
+    def GetElement(self, elementName, root):
+        return self.builder.GetElement(elementName, root)
 
     def AddModulesRoot(self):
         self.modules = self.root.Child('modules')

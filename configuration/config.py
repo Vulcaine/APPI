@@ -1,6 +1,7 @@
 
 import json
 import os
+import sys
 from logger             import Logger
 
 config = {}
@@ -21,6 +22,9 @@ def GetWorkDir():
 
 def GetConfig():
     return config
+
+def GetEntryPoint(appType):
+    return config['entrypoints'][appType][sys.platform]
 
 def WriteAppiConfig(conf):
         appiConfig = None

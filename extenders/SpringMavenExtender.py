@@ -57,16 +57,17 @@ def ExtendRootApp(args):
                 'type': 'spring-maven',
                 'root-directory': SpringProjectRootDirName,
                 'company-name': groupId,
-                'modules': [
-                    {
-                        'root-directory': rootDir,
-                        'src': src,
-                        'resources': resources,
-                    }
-                ],
-                'entrypoint': "cd {0} && {1}".format(SpringProjectRootDirName, conf['entrypoints']['spring-maven'][sys.platform])
+                'modules': {},
+                'entrypoint': "cd {0} && {1}".format(SpringProjectRootDirName, config.GetEntryPoint('spring-maven'))
             }
         }
+    }
+
+    backendFeature['features']['backend']['modules'][rootDir] = {
+        'root-directory': rootDir,
+        'src': src,
+        'resources': resources,
+        'entrypoint': 'cd {0} && {1} -pl {2}'.format(SpringProjectRootDirName, config.GetEntryPoint('spring-maven'), rootDir)
     }
 
     os.makedirs( testPath, exist_ok = True )
@@ -104,7 +105,16 @@ def ExtendRootApp(args):
 def ExtendModule(args):
     rootAppPath = config.GetRelativePath(conf['features']['backend']['root-directory'])
 
-    mainClassName, groupId, moduleDir, pomContent, modulePomContent = csh.CreateSpringModule()
+    standalone = False
+
+    if len(args) == 2:
+        if args[1] == '--standalone':
+            standalone = True
+        else:
+            Logger.Warn("Not recognized argument: " + args[1])
+
+    mainClassName, groupId, moduleDir, pomContent, modulePomContent = csh.CreateSpringModule(
+        standalone)
 
     src = 'src/main/java'
     resources = 'resources'
@@ -118,11 +128,21 @@ def ExtendModule(args):
     modulePomPath = '{0}/{1}/pom.xml'.format(rootAppPath, moduleDir)
     springAppFileNamePath = '{0}/{1}.java'.format(srcPath, mainClassName)
 
-    moduleFeature =  {
-        'root-directory': moduleDir,
-        'src': src,
-        'resources': resources,
-    }
+    cdPath = conf['features']['backend']['root-directory']
+
+    if standalone:
+        moduleFeature = {
+            'root-directory': moduleDir,
+            'src': src,
+            'resources': resources,
+            'entrypoint': 'cd {0} && {1} -pl {2}'.format(cdPath, config.GetEntryPoint('spring-maven'), moduleDir)
+        }
+    else:
+        moduleFeature = {
+            'root-directory': moduleDir,
+            'src': src,
+            'resources': resources,
+        }
 
     os.makedirs(testPath, exist_ok=False)
     os.makedirs(srcPath, exist_ok=False)
@@ -141,7 +161,7 @@ def ExtendModule(args):
     pomFile.write(modulePomContent)
     pomFile.close()
 
-    conf['features']['backend']['modules'].append(moduleFeature)
+    conf['features']['backend']['modules'][moduleDir] = moduleFeature
     config.WriteAppiConfig({"app-type": conf['app-type']})
     config.WriteAppiConfig({"features": conf['features']})
 
