@@ -14,11 +14,11 @@ def CreateNgApp(appName):
     package = "@angular/cli"
     command = "ng new {}".format(appName)
 
-    if not ash.IsNpmPackageInstalled(package):
+    if ash.IsNpmPackageInstalled(package):
         Logger.Info("Angular was not found, installing..")
         ish.NpmInstall(package, True)
 
-    return sh.Call(command)
+    return ash.AssertCall(command)
 
 def InitSimpleExpressApp(additionalSwitchesString = ''):
     rootCommand = "express"
@@ -28,7 +28,7 @@ def InitSimpleExpressApp(additionalSwitchesString = ''):
     ash.AssertExpressInstalled()
 
     Logger.Info("Initializing simple express app...")
-    sh.Call("{0} {1}".format(rootCommand, additionalSwitchesString))
+    return ash.AssertCall("{0} {1}".format(rootCommand, additionalSwitchesString))
 
 # Example: 'appi add npm backend' gonna create a backend project
 def InitNodejsBackend(additionalSwitchesString = '-y'):
@@ -38,14 +38,14 @@ def InitNodejsBackend(additionalSwitchesString = '-y'):
     ash.AssertNPMInstalled()
 
     Logger.Info("Initializing node project...")
-    sh.Call("{0} init backend {1}".format(rootCommand, additionalSwitchesString))
+    return ash.AssertCall("{0} init backend {1}".format(rootCommand, additionalSwitchesString))
 
 def InstallMongoDB():
     conf = config.GetConfig()
 
     installdir = conf["install-root"] + 'mongodb'
 
-    if not ash.AssertMongoInstalled():
+    if ash.AssertMongoInstalled():
         if not sh.AddToPathPrompt(installdir + '/bin'):
             Logger.Alert("Make sure to add this path to env")
 
@@ -64,7 +64,7 @@ def CreateSpringModule(standalone):
         #"module name (spring-boot): ") or "spring-boot"
     packaging = sh.ValuePrompt("packaging (jar): ") or "jar"
     name = sh.ValuePrompt("name (Parent Spring App): ") or "Parent Spring App"
-    appFileName = sh.ValuePrompt("main class name (Main): ") or "SpringMain"
+    appFileName = sh.ValuePrompt("main class name (SpringMain): ") or "SpringMain"
     javaVersion = sh.ValuePrompt("Java version (1.8): ") or "1.8"
 
     modulePomBuilder = PomBuilder()

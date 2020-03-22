@@ -16,7 +16,7 @@ def InstallMultiple(services, via):
     return True
 
 def InstallExe(exeName):
-    return sh.Call('start /wait {}'.format(exeName)) == 0
+    return assertsh.AssertCall('start /wait {}'.format(exeName))
 
 def DownloadTo(url, folder = "", outName = "output.exe"):
     conf = config.GetConfig()
@@ -28,7 +28,7 @@ def DownloadTo(url, folder = "", outName = "output.exe"):
 
     sh.Call('mkdir "{0}"'.format(baseDownloadFolder))
 
-    return sh.Call(downloadCommand) == 0
+    return assertsh.AssertCall(downloadCommand)
 
 def DownloadAndInstallWindowsService(service, serviceName):
     conf = config.GetConfig()
@@ -52,10 +52,10 @@ def InstallViaExecutable(service):
 
     Logger.Info('Installing executable, follow the instructions..', end = ' ')
     if sys.platform == "linux" or sys.platform == "linux2":
-        if not sh.Call('sudo apt-get update'):
+        if not assertsh.AssertCall('sudo apt-get update'):
             raise Exception('Unexpected: Could not update apt')
 
-        if not sh.Call('sudo apt-get install {0}'.format(service)):
+        if not assertsh.AssertCall('sudo apt-get install {0}'.format(service)):
             raise Exception('Unexpected: Could not install service: ' + service)
 
         return Logger.Info(service + " package added", 'green', attrs = ['bold'])
@@ -66,7 +66,7 @@ def InstallViaExecutable(service):
         installer = 'msiexec.exe /i'
         if service in conf['windows-service']:
             if conf['windows-service'][service]['strategy'] == 'msi':
-                return sh.Call('{0} "{1}" ^ INSTALLLOCATION="{2}" /qb'.format(installer, conf['windows-service'][service], installpath))
+                return assertsh.AssertCall('{0} "{1}" ^ INSTALLLOCATION="{2}" /qb'.format(installer, conf['windows-service'][service], installpath))
             return DownloadAndInstallWindowsService(conf['windows-service'][service], service)
     else:
         Logger.Error("Unsupported operating system")
@@ -83,7 +83,7 @@ def NpmInstall(package, isGlobal = False):
     if not isGlobal:
         command = "npm install {0}"
 
-    return sh.Call(command.format(package))
+    return assertsh.AssertCall(command.format(package))
 
 def SpecialUbuntuInstall(installSteps = []):
     if sys.platform == 'linux2':

@@ -25,6 +25,12 @@
             "usage": "appi init"
         },
 
+        "clear": {
+            "aliases": [],
+            "function": "lambda args: self.Clear(args)",
+            "usage": "appi clear <clearable>"
+        },
+
         "feature":  {
             "aliases": [],
             "function": "lambda args: self.ValidateRepository(self.Add, args)",
@@ -121,6 +127,27 @@
             "aliases": ["commit"],
             "function": "lambda args: self.GitCommit(args)",
             "usage": "appi git-commit \"message\" "
+        },
+
+        "docker-ps":
+        {
+            "aliases": ["list-containers", "containers", "ps"],
+            "function": "lambda args: self.DockerPs(args)",
+            "usage": "appi docker-ps"
+        },
+
+        "docker-run":
+        {
+            "aliases": ["run", "start-container"],
+            "function": "lambda args: self.DockerRun(args)",
+            "usage": "appi docker-run <IMAGE>"
+        },
+
+        "docker-compose-up":
+        {
+            "aliases": ["compose"],
+            "function": "lambda args: self.DockerComposeUp(args)",
+            "usage": "appi docker-compose-up <options>"
         },
 
         "download": {

@@ -8,6 +8,7 @@ from extenders          import ExtenderFactory  as EF
 
 from logger             import Logger
 from shell              import shellhelper      as sh
+from shell              import dockershell      as dockersh
 
 class CLIParser:
     def __init__(self, cml):
@@ -106,6 +107,9 @@ class CLIParser:
     def GitHubSetup(self, args):
         return EF.Extend('github', args)
 
+    def DockerRun(self, args):
+        return dockersh.Run(args[1])
+
     def Help(self, args):
         aliases = self.OPTIONS[args[0]]['aliases']
         aliasString = ''
@@ -127,6 +131,16 @@ class CLIParser:
 
     def Download(self, args):
         return
+
+    def Clear(self, args):
+        if len(args) >= 2:
+            if args[1] == 'docker':
+                if dockersh.ClearDocker(args[1:]):
+                    Logger.Success("Docker is clean")
+                else:
+                    Logger.Failed("Something went wrong during docker cleaning")
+        else:
+            return
 
     def Version(self, args):
         Logger.Info('Current version: ' + self.version)
@@ -186,8 +200,6 @@ class CLIParser:
 
         return EF.Extend('spring-maven-module', args)
 
-    # TODO: Beletenni appi.json fájlba hogy milyen komponenseket adtunk hozzá
-    # azzal eldönteni hogy lehet-e hozzáadni, nem az app-type alapján
     def AddNodeJS(self, args):
         if self.conf['app-type'] == 'virtualized':
             return Logger.Error("This is already an {0} based repo, can't add this feature".format(self.conf['app-type']))

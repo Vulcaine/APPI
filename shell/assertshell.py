@@ -4,15 +4,20 @@ from .                  import assertshell          as asserter
 from .                  import shellhelper          as sh
 
 def AssertCall(cmd):
-    return sh.Call(cmd) == 0
+    status, output, err = sh.Call(cmd)
+    if status == 0:
+        return status == 0
+    else:
+        Logger.Error(err)
+        return status == 0
 
 def IsNpmPackageInstalled(package):
     AssertNodeInstalled()
 
-    return sh.Call("npm list -g {0}".format(package))
+    return AssertCall("npm list -g {0}".format(package))
 
 def IsCommandExists(command):
-    return not sh.Call('where {0} /Q'.format(command))
+    return AssertCall('where {0} /Q'.format(command))
 
 def AssertNPMInstalled():
     Logger.Info("Checking npm install path..", end = ' ')
@@ -22,9 +27,10 @@ def AssertNPMInstalled():
         Logger.Success("OK")
         Logger.Info("Verifying latest version of NPM", end = ' ')
 
-        installhelper.Install("npm", "npm")
-
-        Logger.Success("OK")
+        if installhelper.Install("npm", "npm"):
+            return Logger.Success("OK")
+        else:
+            return Logger.Failed("Something happened during installation")
 
 def AssertExpressInstalled():
     Logger.Info("Checking express install path..", end = ' ')

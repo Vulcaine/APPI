@@ -135,13 +135,15 @@ def ExtendModule(args):
             'root-directory': moduleDir,
             'src': src,
             'resources': resources,
-            'entrypoint': 'cd {0} && {1} -pl {2}'.format(cdPath, config.GetEntryPoint('spring-maven'), moduleDir)
+            'entrypoint': 'cd {0} && {1} -pl {2}'.format(cdPath, config.GetEntryPoint('spring-maven'), moduleDir),
+            'standalone': True
         }
     else:
         moduleFeature = {
             'root-directory': moduleDir,
             'src': src,
             'resources': resources,
+            'standalone': False
         }
 
     os.makedirs(testPath, exist_ok=False)
